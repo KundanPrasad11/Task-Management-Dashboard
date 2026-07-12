@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import noDataImg from "../assets/no-data.png";
 import { ActiveTaskCard } from "../components/ActiveTaskCard";
 import { StatusCard } from "../components/StatusCard";
 import TaskFilterSection from "../components/TaskFilterSection";
@@ -94,7 +95,8 @@ export default function Active() {
 					))
 				) : (
 					<div className="col-span-full rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-						{tasks.length === 0 ? 'No tasks yet.' : 'No tasks match the selected filters.'}
+						<div className="mb-4"><img width="100" src={noDataImg} alt="no data icon" className="mx-auto" /></div>
+						<div>{tasks.length === 0 ? 'No tasks yet.' : 'No tasks match the selected filters.'}</div>
 					</div>
 				)}
 			</div>
