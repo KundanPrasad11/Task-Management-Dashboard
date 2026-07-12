@@ -2,7 +2,7 @@ import { useActionState, useEffect } from "react";
 import { addTask, updateTask } from "../features/task/taskSlice";
 import { useDispatch } from "react-redux";
 
-export const TaskForm = ({ onSubmit, initialData = {}, index }) => {
+export const TaskForm = ({ onSubmit, initialData = {} }) => {
     const dispatch = useDispatch();
 
     const formAction = (prev, formData) => {
@@ -26,7 +26,7 @@ export const TaskForm = ({ onSubmit, initialData = {}, index }) => {
 
         const date = new Date().toISOString();
         if (createdAt) {
-            dispatch(updateTask({updatedTask: { task, description, status, dueDate, createdAt, updatedAt: date }, index }));
+            dispatch(updateTask({updatedTask: { task, description, status, dueDate, createdAt, updatedAt: date } }));
         } else {
             dispatch(addTask({ task, description, status, dueDate, createdAt: date, updatedAt: date }));
         }

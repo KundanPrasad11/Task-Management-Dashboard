@@ -8,9 +8,10 @@ const taskSlice = createSlice({
       state.push(action.payload);
     },
     updateTask: (state, action) => {
-      const { index, updatedTask } = action.payload;
-      if (typeof index === 'number' && index >= 0 && index < state.length) {
-        state[index] = updatedTask;
+      const { updatedTask } = action.payload;
+      const idx = state.findIndex((task) => task.createdAt === updatedTask.createdAt);
+      if (idx !== -1) {
+        state[idx] = updatedTask;
       }
     },
     deleteTask: (state, action) => {
