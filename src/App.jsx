@@ -9,7 +9,7 @@ import { store } from './store/store'
 function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter  basename="/your-repository-name">
+      <BrowserRouter  basename="/Task-Management-Dashboard">
         <Navbar />
         <Routes>
           <Route path="/" element={<Active />} />
