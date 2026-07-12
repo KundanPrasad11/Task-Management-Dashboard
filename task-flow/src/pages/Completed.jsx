@@ -33,7 +33,7 @@ export default function Completed() {
   }, [filteredTasks, dueDateSort]);
 
   return (
-    <div className="px-10 py-24">
+    <div className="py-40 md:px-10 md:py-24">
       <div className="text-2xl font-bold text-gray-800">Completed Tasks</div>
       <div className="text-gray-600">Review your accomplished work history.</div>
       <TaskFilterSection
@@ -59,8 +59,8 @@ export default function Completed() {
           ))
         ) : (
           <div className="col-span-full rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-            No tasks match the selected filters.
-          </div>
+						{tasks.length === 0 ? 'No tasks yet.' : 'No tasks match the selected filters.'}
+					</div>
         )}
       </div>
     </div>

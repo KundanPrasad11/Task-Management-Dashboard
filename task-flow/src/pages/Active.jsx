@@ -16,15 +16,13 @@ export default function Active() {
 	const [dueDateSort, setDueDateSort] = useState('normal');
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 	const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [taskToDeleteIndex, setTaskToDeleteIndex] = useState(null);
 
 	const tasks = useSelector((state) => state.task);
 	const dispatch = useDispatch();
 
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		console.log('Selected Task:', tasks[selectedTaskIndex]);
-	}, [selectedTaskIndex]);
 
 	const filteredTasks = useMemo(() => {
 		return tasks.filter((task) => {
@@ -46,8 +44,17 @@ export default function Active() {
 		return tasksCopy;
 	}, [filteredTasks, dueDateSort, tasks]);
 
-	const handleDelete = (index) => {
-		dispatch(deleteTask(index));
+	const handleDeleteClick = (index) => {
+		setTaskToDeleteIndex(index);
+		setIsDeleteModalOpen(true);
+	};
+
+	const confirmDelete = () => {
+		if (taskToDeleteIndex !== null) {
+			dispatch(deleteTask(taskToDeleteIndex));
+		}
+		setTaskToDeleteIndex(null);
+		setIsDeleteModalOpen(false);
 	};
 
 	const handleEdit = (index) => {
@@ -56,10 +63,10 @@ export default function Active() {
 	};
 
 	return (
-		<div className="px-10 py-24">
-			<div className="text-2xl font-bold text-gray-800">Active Tasks</div>
-			<div className="text-gray-600">Manage and track your ongoing work.</div>
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-4">
+		<div className="py-40 md:px-10 md:py-24">
+			<div className="text-2xl font-bold text-gray-800">All Tasks</div>
+			<div className="text-gray-600">Manage and track your work.</div>
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
 				{Object.entries(statusOptions).map(([status, { icon, count }]) => (
 					<StatusCard key={status} status={status} icon={icon} count={count} />
 				))}
@@ -82,19 +89,19 @@ export default function Active() {
 							status={task.status}
 							dueDate={task.dueDate}
 							onEdit={() => handleEdit(index)}
-							onDelete={() => handleDelete(index)}
+							onDelete={() => handleDeleteClick(index)}
 						/>
 					))
 				) : (
 					<div className="col-span-full rounded-lg border border-dashed border-gray-300 p-6 text-center text-gray-500">
-						No tasks match the selected filters.
+						{tasks.length === 0 ? 'No tasks yet.' : 'No tasks match the selected filters.'}
 					</div>
 				)}
 			</div>
 			<Modal
 				isOpen={isTaskModalOpen} 
 				onClose={() => setIsTaskModalOpen(false)}
-				title="Add Task"
+				title="Update Task"
 				content= {<TaskForm onSubmit={() => {
 					setSelectedTaskIndex(null);
 					setIsTaskModalOpen(false);
@@ -103,6 +110,36 @@ export default function Active() {
 					initialData={selectedTaskIndex !== null ? tasks[selectedTaskIndex] : {}}
 					index={selectedTaskIndex}
 					/>
+				}
+			/>
+			<Modal
+				isOpen={isDeleteModalOpen}
+				onClose={() => {
+					setTaskToDeleteIndex(null);
+					setIsDeleteModalOpen(false);
+				}}
+				title="Delete Task"
+				content={<p className="text-gray-600">Are you sure you want to delete this task <strong>"{tasks[taskToDeleteIndex]?.task}"</strong>?</p>}
+				footer={
+					<div className="flex justify-end gap-3">
+						<button
+							type="button"
+							className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100"
+							onClick={() => {
+								setTaskToDeleteIndex(null);
+								setIsDeleteModalOpen(false);
+							}}
+						>
+							Cancel
+						</button>
+						<button
+							type="button"
+							className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+							onClick={confirmDelete}
+						>
+							Delete
+						</button>
+					</div>
 				}
 			/>
 		</div>
