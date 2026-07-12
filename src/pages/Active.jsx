@@ -6,7 +6,7 @@ import TaskFilterSection from "../components/TaskFilterSection";
 import { LuClock4, LuRefreshCcw, LuCheck } from "react-icons/lu";
 import { statusOptions } from "../constants/taskManager";
 import { useDispatch, useSelector } from "react-redux";
-import { addTask, deleteTask } from "../features/task/taskSlice";
+import { deleteTask } from "../features/task/taskSlice";
 import { TaskForm } from "../components/TaskForm";
 import { Modal } from "../components/Modal";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ export default function Active() {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [statusFilter, setStatusFilter] = useState('all');
 	const [dueDateSort, setDueDateSort] = useState('normal');
-	const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
+	const [selectedTaskId, setSelectedTaskId] = useState(null);
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -44,21 +44,21 @@ export default function Active() {
 		return tasksCopy;
 	}, [filteredTasks, dueDateSort, tasks]);
 
-	const handleDeleteClick = (index) => {
-		setSelectedTaskIndex(index);
+	const handleDeleteClick = (taskId) => {
+		setSelectedTaskId(taskId);
 		setIsDeleteModalOpen(true);
 	};
 
 	const confirmDelete = () => {
-		if (selectedTaskIndex !== null) {
-			dispatch(deleteTask(selectedTaskIndex));
+		if (selectedTaskId !== null) {
+			dispatch(deleteTask(selectedTaskId));
 		}
-		setSelectedTaskIndex(null);
+		setSelectedTaskId(null);
 		setIsDeleteModalOpen(false);
 	};
 
-	const handleEdit = (index) => {
-		setSelectedTaskIndex(index);
+	const handleEdit = (taskId) => {
+		setSelectedTaskId(taskId);
 		setIsTaskModalOpen(true);
 	};
 
@@ -85,15 +85,15 @@ export default function Active() {
 			/>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
 				{sortedTasks.length > 0 ? (
-					sortedTasks.map((task, index) => (
+					sortedTasks.map((task) => (
 						<ActiveTaskCard
 							key={task.createdAt}
 							task={task.task}
 							description={task.description}
 							status={task.status}
 							dueDate={task.dueDate}
-							onEdit={() => handleEdit(index)}
-							onDelete={() => handleDeleteClick(index)}
+							onEdit={() => handleEdit(task.createdAt)}
+							onDelete={() => handleDeleteClick(task.createdAt)}
 						/>
 					))
 				) : (
@@ -105,33 +105,36 @@ export default function Active() {
 			</div>
 			<Modal
 				isOpen={isTaskModalOpen} 
-				onClose={() => setIsTaskModalOpen(false)}
+				onClose={() => {
+					setSelectedTaskId(null);
+					setIsTaskModalOpen(false);
+				}}
 				title="Update Task"
 				content= {
 					<TaskForm onSubmit={() => {
-						setSelectedTaskIndex(null);
+						setSelectedTaskId(null);
 						setIsTaskModalOpen(false);
 						navigate('/');
 						}} 
-						initialData={selectedTaskIndex !== null ? sortedTasks[selectedTaskIndex] : {}}
+						initialData={selectedTaskId !== null ? sortedTasks.find((task) => task.createdAt === selectedTaskId) : {}}
 					/>
 				}
 			/>
 			<Modal
 				isOpen={isDeleteModalOpen}
 				onClose={() => {
-					setSelectedTaskIndex(null);
+					setSelectedTaskId(null);
 					setIsDeleteModalOpen(false);
 				}}
 				title="Delete Task"
-				content={<p className="text-gray-600">Are you sure you want to delete this task <strong>"{sortedTasks[selectedTaskIndex]?.task}"</strong>?</p>}
+				content={<p className="text-gray-600">Are you sure you want to delete this task <strong>"{sortedTasks.find((task) => task.createdAt === selectedTaskId)?.task}"</strong>?</p>}
 				footer={
 					<div className="flex justify-end gap-3">
 						<button
 							type="button"
 							className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-100"
 							onClick={() => {
-								setSelectedTaskIndex(null);
+								setSelectedTaskId(null);
 								setIsDeleteModalOpen(false);
 							}}
 						>

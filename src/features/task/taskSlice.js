@@ -15,8 +15,11 @@ const taskSlice = createSlice({
       }
     },
     deleteTask: (state, action) => {
-      const index = action.payload;
-      state.splice(index, 1);
+      const createdAt = action.payload;
+      const index = state.findIndex((task) => task.createdAt === createdAt);
+      if (index !== -1) {
+        state.splice(index, 1);
+      }
     }
   }
 });
