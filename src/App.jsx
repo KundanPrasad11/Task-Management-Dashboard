@@ -9,7 +9,7 @@ import { store } from './store/store'
 function App() {
   return (
     <Provider store={store}>
-      <BrowserRouter  basename="/Task-Management-Dashboard">
+      <BrowserRouter  basename="/">
         <Navbar />
         <Routes>
           <Route path="/" element={<Active />} />
