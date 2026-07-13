@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import noDataImg from "../assets/no-data.png";
-import { ActiveTaskCard } from "../components/ActiveTaskCard";
-import { StatusCard } from "../components/StatusCard";
+import { TaskCard } from "../components/TaskCard";
+import { MetricCard } from "../components/MetricCard";
 import TaskFilterSection from "../components/TaskFilterSection";
 import { LuClock4, LuRefreshCcw, LuCheck } from "react-icons/lu";
 import { statusOptions } from "../constants/taskManager";
@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 export default function Active() {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [statusFilter, setStatusFilter] = useState('all');
-	const [dueDateSort, setDueDateSort] = useState('normal');
+	const [dueDateSort, setDueDateSort] = useState('default');
 	const [selectedTaskId, setSelectedTaskId] = useState(null);
 	const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -72,7 +72,7 @@ export default function Active() {
 			<div className="text-gray-600">Manage and track your work.</div>
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
 				{Object.entries(statusOptions).map(([status, { icon }]) => (
-					<StatusCard key={status} status={status} icon={icon} count={getMetric(status)} />
+					<MetricCard key={status} status={status} icon={icon} count={getMetric(status)} />
 				))}
 			</div>
 			<TaskFilterSection
@@ -86,7 +86,7 @@ export default function Active() {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
 				{sortedTasks.length > 0 ? (
 					sortedTasks.map((task) => (
-						<ActiveTaskCard
+						<TaskCard
 							key={task.createdAt}
 							task={task.task}
 							description={task.description}

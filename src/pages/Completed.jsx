@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
-import { ActiveTaskCard } from "../components/ActiveTaskCard";
-import { StatusCard } from "../components/StatusCard";
+import { TaskCard } from "../components/TaskCard";
 import TaskFilterSection from "../components/TaskFilterSection";
 import { statusOptions } from "../constants/taskManager";
 import { useSelector } from "react-redux";
@@ -8,7 +7,7 @@ import { useSelector } from "react-redux";
 export default function Completed() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [dueDateSort, setDueDateSort] = useState('normal');
+  const [dueDateSort, setDueDateSort] = useState('default');
 
   const tasks = useSelector((state) => state.task);
 
@@ -47,7 +46,7 @@ export default function Completed() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
         {sortedTasks.filter((task) => task.status === 'completed').length > 0 ? (
           sortedTasks.filter((task) => task.status === 'completed').map((task, index) => (
-            <ActiveTaskCard
+            <TaskCard
               key={task.createdAt}
               task={task.task}
               description={task.description}

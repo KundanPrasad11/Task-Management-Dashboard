@@ -3,8 +3,8 @@ import Card from './Card';
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineCalendar } from "react-icons/ai";
 import Tag from './Tag';
 
-export const ActiveTaskCard = ({ task, description, status, dueDate, onEdit, onDelete }) => {
-    const variant = status === 'completed' ? 'success' : status === 'in-progress' ? 'normal' : 'danger';
+export const TaskCard = ({ task, description, status, dueDate, onEdit, onDelete }) => {
+    const variant = status === 'completed' ? 'success' : status === 'in-progress' ? 'primary' : 'danger';
     
     return (
         <Card>

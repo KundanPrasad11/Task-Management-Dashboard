@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { FiSearch, FiArrowDown, FiArrowUp, FiArrowRight } from 'react-icons/fi';
+import { MdOutlineSort } from 'react-icons/md';
 
 const TaskFilterSection = ({
   searchTerm,
@@ -14,18 +15,10 @@ const TaskFilterSection = ({
   const isCompletedPage = location.pathname === '/completed';
 
   const nextSort = (current) => {
-    if (current === 'normal') return 'asc';
+    if (current === 'default') return 'asc';
     if (current === 'asc') return 'desc';
-    return 'normal';
+    return 'default';
   };
-
-  const sortIcon = {
-    normal: FiArrowRight,
-    asc: FiArrowUp,
-    desc: FiArrowDown,
-  }[dueDateSort];
-
-  const SortIcon = sortIcon || FiArrowRight;
 
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mt-12">
@@ -61,17 +54,17 @@ const TaskFilterSection = ({
         <button
           type="button"
           title={
-            dueDateSort === 'normal'
+            dueDateSort === 'default'
               ? 'Click to sort due date ascending'
               : dueDateSort === 'asc'
               ? 'Click to sort due date descending'
               : 'Click to reset due date sort'
           }
           onClick={() => setDueDateSort(nextSort(dueDateSort))}
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-blue-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-blue-50 md:w-[150px]"
         >
-          <SortIcon className="h-4 w-4" />
-          Sort
+          <MdOutlineSort className="h-4 w-4" />
+          Sort {nextSort(dueDateSort)}
         </button>
       </div>
     </div>
