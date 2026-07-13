@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { TaskCard } from "../components/TaskCard";
 import TaskFilterSection from "../components/TaskFilterSection";
 import { statusOptions } from "../constants/taskManager";
+import noDataImg from "../assets/no-data.png";
 import { useSelector } from "react-redux";
 
 export default function Completed() {
